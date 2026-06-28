@@ -23,3 +23,20 @@ Forecast daily product demand for multiple retail stores to optimize inventory a
 - Prophet
 - SHAP
 - Power BI
+
+## Dataset
+
+The project uses the Kaggle "Store Sales - Time Series Forecasting" dataset.
+
+### Files
+
+- train.csv
+- test.csv
+- stores.csv
+- transactions.csv
+- holidays_events.csv
+- oil.csv
+
+### Business Goal
+
+Forecast daily sales for every store and product family to optimize inventory planning.
