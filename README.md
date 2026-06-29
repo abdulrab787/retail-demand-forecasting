@@ -53,6 +53,24 @@ Metrics:
 
 The baseline establishes a benchmark before introducing advanced gradient boosting models.
 
+## Forecasting Models
+
+The project compares multiple machine learning models:
+
+- Linear Regression
+- XGBoost
+- LightGBM
+- CatBoost
+
+Performance is evaluated using:
+
+- MAE
+- RMSE
+- RMSLE
+- MAPE
+
+The best-performing model is selected for deployment.
+
 ### Business Goal
 
 Forecast daily sales for every store and product family to optimize inventory planning.
