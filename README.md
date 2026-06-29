@@ -37,6 +37,22 @@ The project uses the Kaggle "Store Sales - Time Series Forecasting" dataset.
 - holidays_events.csv
 - oil.csv
 
+## Baseline Forecasting
+
+Models evaluated:
+
+- Naïve Forecast
+- Linear Regression
+
+Metrics:
+
+- MAE
+- RMSE
+- RMSLE
+- MAPE
+
+The baseline establishes a benchmark before introducing advanced gradient boosting models.
+
 ### Business Goal
 
 Forecast daily sales for every store and product family to optimize inventory planning.
