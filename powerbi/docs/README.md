@@ -1,3 +1,10 @@
+# 🌌 Retail BI Forecasting Project  
+### Ultra Dark  Edition — Power BI + Tabular Editor + GitHub
+
+A futuristic retail analytics system built with Power BI, engineered for forecasting, promotions, inventory risk, and store performance — wrapped in a premium Ultra Dark Neon theme.
+
+Designed for enterprise BI teams, optimized for GitHub version control, and structured for long-term maintainability.
+
 # Retail BI Forecasting Project
 
 A complete Power BI analytics solution for Retail Sales, Forecasting, Promotions, Inventory Risk, and Store Performance.  
