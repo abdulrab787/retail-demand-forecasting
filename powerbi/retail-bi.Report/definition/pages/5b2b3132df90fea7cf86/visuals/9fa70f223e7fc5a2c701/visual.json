@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "9fa70f223e7fc5a2c701",
+  "position": {
+    "x": 1040,
+    "y": 0,
+    "z": 5000,
+    "height": 98,
+    "width": 192,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Inventory Risk Level"
+                }
+              },
+              "queryRef": "_Measures.Inventory Risk Level",
+              "nativeQueryRef": "Inventory Risk Level"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "f775b0a284a04aaf99f4"
+}

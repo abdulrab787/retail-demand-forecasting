@@ -1,0 +1,5 @@
+----------------------
+-- Measure: [Residual]
+----------------------
+MEASURE _Measures[Residual] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_KPI"

@@ -1,0 +1,4 @@
+---------------------------
+-- Calculated Table: 'Date'
+---------------------------
+TABLE 'Date' = CALENDAR(MIN(dashboard_dataset[date]), MAX(dashboard_dataset[date]))

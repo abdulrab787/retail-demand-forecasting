@@ -1,0 +1,65 @@
+-----------------------------
+-- Measure: [Holiday Revenue]
+-----------------------------
+MEASURE _Measures[Holiday Revenue] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[is_holiday] = 1
+    )
+    , DisplayFolder = "_Revenue"
+    , FormatString = "0"
+
+--------------------------------
+-- Measure: [Revenue Difference]
+--------------------------------
+MEASURE _Measures[Revenue Difference] = [Total Revenue] - [Total Predicted Revenue]
+    , DisplayFolder = "_Revenue"
+
+--------------------------------
+-- Measure: [Revenue This Month]
+--------------------------------
+MEASURE _Measures[Revenue This Month] = 
+    CALCULATE(
+        [Total Revenue],
+        MONTH(dashboard_dataset[date]) = MONTH(TODAY())
+    )
+    , DisplayFolder = "_Revenue"
+    , FormatString = "0"
+
+--------------------------------
+-- Measure: [Revenue Last Month]
+--------------------------------
+MEASURE _Measures[Revenue Last Month] = 
+    CALCULATE(
+        [Total Revenue],
+        DATEADD(dashboard_dataset[date], -1, MONTH)
+    )
+    , DisplayFolder = "_Revenue"
+    , FormatString = "0"
+
+-----------------------------
+-- Measure: [Cluster Revenue]
+-----------------------------
+MEASURE _Measures[Cluster Revenue] = SUM(dashboard_dataset[actual])
+    , DisplayFolder = "_Revenue"
+    , FormatString = "0"
+
+-------------------------
+-- Measure: [Revenue MOM]
+-------------------------
+MEASURE _Measures[Revenue MOM] = 
+    DIVIDE(
+        [Total Revenue] - CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, MONTH)),
+        CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, MONTH))
+    )
+    , DisplayFolder = "_Revenue"
+
+-------------------------
+-- Measure: [Revenue YOY]
+-------------------------
+MEASURE _Measures[Revenue YOY] = 
+    DIVIDE(
+        [Total Revenue] - CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, YEAR)),
+        CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, YEAR))
+    )
+    , DisplayFolder = "_Revenue"

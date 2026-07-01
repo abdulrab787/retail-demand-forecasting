@@ -1,0 +1,108 @@
+﻿{
+  "name": "Retail Dark Base Theme",
+  "dataColors": [
+    "#1F77B4",
+    "#FF7F0E",
+    "#9467BD",
+    "#D62728",
+    "#17BECF"
+  ],
+  "background": "#0B1020",
+  "foreground": "#F5F7FA",
+  "tableAccent": "#1F77B4",
+
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 12,
+            "color": {
+              "solid": {
+                "color": "#F5F7FA"
+              }
+            }
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#141A33"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ]
+      }
+    },
+
+    "clusteredBarChart": {
+      "*": {
+        "categoryAxis": [
+          {
+            "show": true,
+            "labelColor": {
+              "solid": {
+                "color": "#D0D4E6"
+              }
+            }
+          }
+        ],
+        "valueAxis": [
+          {
+            "show": true,
+            "labelColor": {
+              "solid": {
+                "color": "#D0D4E6"
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": "#28324D"
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    "lineChart": {
+      "*": {
+        "categoryAxis": [
+          {
+            "show": true,
+            "labelColor": {
+              "solid": {
+                "color": "#D0D4E6"
+              }
+            }
+          }
+        ],
+        "valueAxis": [
+          {
+            "show": true,
+            "labelColor": {
+              "solid": {
+                "color": "#D0D4E6"
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": "#28324D"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

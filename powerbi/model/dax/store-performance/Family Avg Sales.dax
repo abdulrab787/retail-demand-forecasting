@@ -1,0 +1,5 @@
+------------------------------
+-- Measure: [Family Avg Sales]
+------------------------------
+MEASURE _Measures[Family Avg Sales] = AVERAGE(dashboard_dataset[family_avg_sales])
+    , DisplayFolder = "_KPI"

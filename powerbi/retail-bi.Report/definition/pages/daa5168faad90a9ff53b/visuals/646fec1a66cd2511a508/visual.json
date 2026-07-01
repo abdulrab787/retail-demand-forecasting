@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "646fec1a66cd2511a508",
+  "position": {
+    "x": 924,
+    "y": 0,
+    "z": 3000,
+    "height": 96.000000000000028,
+    "width": 308,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Worst Product Family"
+                }
+              },
+              "queryRef": "_Measures.Worst Product Family",
+              "nativeQueryRef": "Worst Product Family"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "e5378966a6865b10d4a6"
+}

@@ -1,0 +1,9 @@
+----------------------------
+-- Measure: [Promotion Lift]
+----------------------------
+MEASURE _Measures[Promotion Lift] = 
+    DIVIDE(
+        [Promotion Revenue] - [Non Promotion Revenue],
+        [Non Promotion Revenue]
+    )
+    , DisplayFolder = "_Promotions"

@@ -1,0 +1,9 @@
+------------------------
+-- Measure: [MoM Growth]
+------------------------
+MEASURE _Measures[MoM Growth] = 
+    DIVIDE(
+        [Revenue This Month] - [Revenue Last Month],
+        [Revenue Last Month]
+    )
+    , DisplayFolder = "_KPI"

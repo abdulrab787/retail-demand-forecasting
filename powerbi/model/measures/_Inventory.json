@@ -1,0 +1,34 @@
+----------------------------
+-- Measure: [Inventory Risk]
+----------------------------
+MEASURE _Measures[Inventory Risk] = 
+    IF(
+    AVERAGE(dashboard_dataset[residual]) > 20,
+    "HIGH",
+    "LOW"
+    )
+    , DisplayFolder = "_Inventory"
+
+----------------------------------
+-- Measure: [Inventory Risk Score]
+----------------------------------
+MEASURE _Measures[Inventory Risk Score] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_Inventory"
+
+----------------------------------
+-- Measure: [Inventory Risk Level]
+----------------------------------
+MEASURE _Measures[Inventory Risk Level] = 
+    IF(
+        [Inventory Risk Score] > 20,
+        "HIGH",
+        "LOW"
+    )
+    , DisplayFolder = "_Inventory"
+
+------------------------------------
+-- Measure: [Inventory Risk Numeric]
+------------------------------------
+MEASURE _Measures[Inventory Risk Numeric] = IF([Inventory Risk] = "HIGH", 2, 1)
+    , DisplayFolder = "_Inventory"
+    , FormatString = "0"

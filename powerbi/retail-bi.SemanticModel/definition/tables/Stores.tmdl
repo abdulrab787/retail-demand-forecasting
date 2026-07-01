@@ -1,0 +1,20 @@
+table Stores
+	lineageTag: 77b163a6-16ee-4fe0-940e-bb21570a6cfd
+
+	column store_nbr
+		formatString: 0
+		lineageTag: f790034b-4558-4b22-904b-148b37dc79a6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: dashboard_dataset[store_nbr]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Stores = calculated
+		mode: import
+		source =
+				
+				VALUES(dashboard_dataset[store_nbr])
+
+	annotation PBI_Id = a662681d460b47f6894af992aa5ab9c7
+

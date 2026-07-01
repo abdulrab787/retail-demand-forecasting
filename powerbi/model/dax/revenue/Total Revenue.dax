@@ -1,0 +1,6 @@
+---------------------------
+-- Measure: [Total Revenue]
+---------------------------
+MEASURE _Measures[Total Revenue] = SUM(dashboard_dataset[actual])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"

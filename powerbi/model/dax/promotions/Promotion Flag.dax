@@ -1,0 +1,10 @@
+--------------------------------------
+-- Measure: [Promotion Revenue (Flag)]
+--------------------------------------
+MEASURE _Measures[Promotion Revenue (Flag)] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[promotion_flag] = 1
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"

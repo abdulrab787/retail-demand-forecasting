@@ -1,0 +1,256 @@
+---------------------------
+-- Measure: [Total Revenue]
+---------------------------
+MEASURE _Measures[Total Revenue] = SUM(dashboard_dataset[actual])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+-------------------------------
+-- Measure: [Forecast Accuracy]
+-------------------------------
+MEASURE _Measures[Forecast Accuracy] = 
+    1 -
+    DIVIDE(
+    SUMX(dashboard_dataset, ABS(dashboard_dataset[residual])),
+    SUM(dashboard_dataset[actual])
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------
+-- Measure: [Family Avg Sales]
+------------------------------
+MEASURE _Measures[Family Avg Sales] = AVERAGE(dashboard_dataset[family_avg_sales])
+    , DisplayFolder = "_KPI"
+
+----------------
+-- Measure: [R2]
+----------------
+MEASURE _Measures[R2] = 
+    VAR SS_Residual =
+        SUMX(
+            dashboard_dataset,
+            (dashboard_dataset[actual] - dashboard_dataset[predicted])^2
+        )
+    VAR SS_Total =
+        SUMX(
+            dashboard_dataset,
+            (dashboard_dataset[actual] - AVERAGE(dashboard_dataset[actual]))^2
+        )
+    RETURN
+    1 - DIVIDE(SS_Residual, SS_Total)
+    , DisplayFolder = "_KPI"
+
+----------------------------------
+-- Measure: [Holiday Type Revenue]
+----------------------------------
+MEASURE _Measures[Holiday Type Revenue] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[holiday_type_Holiday] = TRUE()
+    )
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+------------------------
+-- Measure: [MoM Growth]
+------------------------
+MEASURE _Measures[MoM Growth] = 
+    DIVIDE(
+        [Revenue This Month] - [Revenue Last Month],
+        [Revenue Last Month]
+    )
+    , DisplayFolder = "_KPI"
+
+--------------------------
+-- Measure: [Total Stores]
+--------------------------
+MEASURE _Measures[Total Stores] = DISTINCTCOUNT(dashboard_dataset[store_nbr])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+------------------------------------
+-- Measure: [Total Product Families]
+------------------------------------
+MEASURE _Measures[Total Product Families] = DISTINCTCOUNT(dashboard_dataset[family])
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+----------------------------
+-- Measure: [Absolute Error]
+----------------------------
+MEASURE _Measures[Absolute Error] = 
+    SUMX(
+        dashboard_dataset,
+        ABS(dashboard_dataset[residual])
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------
+-- Measure: [Rolling Accuracy]
+------------------------------
+MEASURE _Measures[Rolling Accuracy] = 
+    VAR Window =
+        CALCULATE(
+            [Forecast Accuracy],
+            DATESINPERIOD(
+                dashboard_dataset[date],
+                MAX(dashboard_dataset[date]),
+                -30,
+                DAY
+            )
+        )
+    RETURN Window
+    , DisplayFolder = "_KPI"
+
+---------------------------
+-- Measure: [Store Segment]
+---------------------------
+MEASURE _Measures[Store Segment] = 
+    SWITCH(
+        TRUE(),
+        [Store Revenue] > 10e6, "High Performer",
+        [Store Revenue] > 5e6, "Mid Performer",
+        "Low Performer"
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------
+-- Measure: [Top Family]
+------------------------
+MEASURE _Measures[Top Family] = 
+    CONCATENATEX(
+        TOPN(
+            1,
+            SUMMARIZE(
+                dashboard_dataset,
+                dashboard_dataset[family],
+                "Revenue", [Total Revenue]
+            ),
+            [Revenue],
+            DESC
+        ),
+        dashboard_dataset[family]
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------
+-- Measure: [Top Stores]
+------------------------
+MEASURE _Measures[Top Stores] = 
+    CONCATENATEX(
+        TOPN(
+            3,
+            SUMMARIZE(
+                dashboard_dataset,
+                dashboard_dataset[store_nbr],
+                "Revenue", [Store Revenue]
+            ),
+            [Revenue],
+            DESC
+        ),
+        dashboard_dataset[store_nbr],
+        ", "
+    )
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Absolute Residual]
+-------------------------------
+MEASURE _Measures[Absolute Residual] = 
+    SUMX(
+        dashboard_dataset,
+        ABS(dashboard_dataset[residual])
+    )
+    , DisplayFolder = "_KPI"
+
+----------------------
+-- Measure: [Residual]
+----------------------
+MEASURE _Measures[Residual] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_KPI"
+
+--------------------------
+-- Measure: [Residual Bin]
+--------------------------
+MEASURE _Measures[Residual Bin] = 
+    VAR BinSize = 5
+    RETURN
+    FLOOR(AVERAGE(dashboard_dataset[residual]), BinSize)
+    , DisplayFolder = "_KPI"
+    , FormatString = "0"
+
+--------------------------------
+-- Measure: [Residual Bin Label]
+--------------------------------
+MEASURE _Measures[Residual Bin Label] = 
+    VAR BinSize = 5
+    VAR ResidualValue = AVERAGE(dashboard_dataset[residual])
+    VAR BinStart = FLOOR(ResidualValue, BinSize)
+    VAR BinEnd = BinStart + BinSize
+    RETURN
+    FORMAT(BinStart, "0") & " to " & FORMAT(BinEnd, "0")
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Residual Category]
+-------------------------------
+MEASURE _Measures[Residual Category] = 
+    VAR R = AVERAGE(dashboard_dataset[residual])
+    RETURN
+    SWITCH(
+        TRUE(),
+        R > 10, "High Over‑Prediction",
+        R > 0, "Over‑Prediction",
+        R < -10, "High Under‑Prediction",
+        R < 0, "Under‑Prediction",
+        "Perfect"
+    )
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Residual Variance]
+-------------------------------
+MEASURE _Measures[Residual Variance] = 
+    VAR MeanResidual = [Residual]
+    RETURN
+    AVERAGEX(
+        dashboard_dataset,
+        (dashboard_dataset[residual] - MeanResidual)^2
+    )
+    , DisplayFolder = "_KPI"
+
+-----------------------------------
+-- Measure: [Average Store Revenue]
+-----------------------------------
+MEASURE _Measures[Average Store Revenue] = 
+    AVERAGEX(
+        VALUES(dashboard_dataset[store_nbr]),
+        CALCULATE(SUM(dashboard_dataset[actual]))
+    )
+    , DisplayFolder = "_KPI"
+
+---------------------------
+-- Measure: [Average Error]
+---------------------------
+MEASURE _Measures[Average Error] = 
+    AVERAGEX(
+        dashboard_dataset,
+        ABS(dashboard_dataset[residual])
+    )
+    , DisplayFolder = "_KPI"
+
+-------------------------------
+-- Measure: [Seasonality Index]
+-------------------------------
+MEASURE _Measures[Seasonality Index] = 
+    DIVIDE(
+        [Total Revenue],
+        CALCULATE([Total Revenue], ALL(dashboard_dataset[month]))
+    )
+    , DisplayFolder = "_KPI"
+
+------------------------------
+-- Measure: [Store Risk Score]
+------------------------------
+MEASURE _Measures[Store Risk Score] = [Store Forecast Error] * [Inventory Risk Numeric]
+    , DisplayFolder = "_KPI"

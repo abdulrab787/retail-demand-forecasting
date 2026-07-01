@@ -1,0 +1,17 @@
+relationship 4bfff190-400d-4315-8bc9-06faace6d7de
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Date
+	toColumn: LocalDateTable_a09ee182-bfca-401e-83ed-95208bada857.Date
+
+relationship 8b172e58-2347-aeba-1e41-353273ea242e
+	fromColumn: dashboard_dataset.date
+	toColumn: Date.Date
+
+relationship b8833635-e846-ba3c-3a4e-d27c1586eb77
+	fromColumn: dashboard_dataset.family
+	toColumn: Families.family
+
+relationship 87fa290c-a854-b9b0-de37-2589ff0f5bd8
+	fromColumn: dashboard_dataset.store_nbr
+	toColumn: Stores.store_nbr
+

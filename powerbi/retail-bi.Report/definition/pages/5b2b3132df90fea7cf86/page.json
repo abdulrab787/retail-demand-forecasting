@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "5b2b3132df90fea7cf86",
+  "displayName": "Promotion Analytics",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

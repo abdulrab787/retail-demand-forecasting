@@ -1,0 +1,69 @@
+-------------------------------
+-- Measure: [Promotion Revenue]
+-------------------------------
+MEASURE _Measures[Promotion Revenue] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[onpromotion_x] > 0
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"
+
+----------------------------
+-- Measure: [Promotion Rows]
+----------------------------
+MEASURE _Measures[Promotion Rows] = 
+    CALCULATE(
+        COUNTROWS(dashboard_dataset),
+        dashboard_dataset[onpromotion_x] > 0
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"
+
+----------------------------------
+-- Measure: [Promotion Percentage]
+----------------------------------
+MEASURE _Measures[Promotion Percentage] = 
+    DIVIDE(
+        [Promotion Revenue],
+        [Total Revenue]
+    )
+    , DisplayFolder = "_Promotions"
+
+-----------------------------------
+-- Measure: [Non Promotion Revenue]
+-----------------------------------
+MEASURE _Measures[Non Promotion Revenue] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[onpromotion_x] = 0
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"
+
+----------------------------
+-- Measure: [Promotion Lift]
+----------------------------
+MEASURE _Measures[Promotion Lift] = 
+    DIVIDE(
+        [Promotion Revenue] - [Non Promotion Revenue],
+        [Non Promotion Revenue]
+    )
+    , DisplayFolder = "_Promotions"
+
+---------------------------------
+-- Measure: [Promotion Intensity]
+---------------------------------
+MEASURE _Measures[Promotion Intensity] = AVERAGE(dashboard_dataset[onpromotion_x])
+    , DisplayFolder = "_Promotions"
+
+--------------------------------------
+-- Measure: [Promotion Revenue (Flag)]
+--------------------------------------
+MEASURE _Measures[Promotion Revenue (Flag)] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[promotion_flag] = 1
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"

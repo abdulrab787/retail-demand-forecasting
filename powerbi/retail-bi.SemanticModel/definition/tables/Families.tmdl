@@ -1,0 +1,19 @@
+table Families
+	lineageTag: c533dda5-97c5-47b9-b30a-0bfe3112bfc7
+
+	column family
+		lineageTag: 7110e957-762c-49a6-9068-09f2560ce40e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: dashboard_dataset[family]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Families = calculated
+		mode: import
+		source =
+				
+				VALUES(dashboard_dataset[family])
+
+	annotation PBI_Id = afb01e638e084af0a121cdc07c001e67
+

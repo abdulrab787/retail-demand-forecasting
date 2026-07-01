@@ -1,0 +1,10 @@
+-------------------------------
+-- Measure: [Promotion Revenue]
+-------------------------------
+MEASURE _Measures[Promotion Revenue] = 
+    CALCULATE(
+        SUM(dashboard_dataset[actual]),
+        dashboard_dataset[onpromotion_x] > 0
+    )
+    , DisplayFolder = "_Promotions"
+    , FormatString = "0"

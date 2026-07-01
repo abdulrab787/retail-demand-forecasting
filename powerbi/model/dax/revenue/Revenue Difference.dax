@@ -1,0 +1,5 @@
+--------------------------------
+-- Measure: [Revenue Difference]
+--------------------------------
+MEASURE _Measures[Revenue Difference] = [Total Revenue] - [Total Predicted Revenue]
+    , DisplayFolder = "_Revenue"

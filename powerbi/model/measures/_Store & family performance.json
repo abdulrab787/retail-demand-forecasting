@@ -1,0 +1,51 @@
+-----------------------------
+-- Measure: [Store Avg Sales]
+-----------------------------
+MEASURE _Measures[Store Avg Sales] = AVERAGE(dashboard_dataset[store_avg_sales])
+    , DisplayFolder = "_Worst store / family"
+
+-------------------------
+-- Measure: [Worst Store]
+-------------------------
+MEASURE _Measures[Worst Store] = 
+    VAR StoreErrors =
+        ADDCOLUMNS(
+            SUMMARIZE(dashboard_dataset, dashboard_dataset[store_nbr]),
+            "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+        )
+    VAR Worst =
+        TOPN(1, StoreErrors, [Error], DESC)
+    RETURN
+        MAXX(Worst, dashboard_dataset[store_nbr])
+    , DisplayFolder = "_Worst store / family"
+    , FormatString = "0"
+
+----------------------------------
+-- Measure: [Worst Product Family]
+----------------------------------
+MEASURE _Measures[Worst Product Family] = 
+    VAR FamilyErrors =
+        ADDCOLUMNS(
+            SUMMARIZE(dashboard_dataset, dashboard_dataset[family]),
+            "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+        )
+    VAR Worst =
+        TOPN(1, FamilyErrors, [Error], DESC)
+    RETURN
+        MAXX(Worst, dashboard_dataset[family])
+    , DisplayFolder = "_Worst store / family"
+
+-------------------------------
+-- Measure: [Worst Store Error]
+-------------------------------
+MEASURE _Measures[Worst Store Error] = 
+    VAR StoreErrors =
+        ADDCOLUMNS(
+            SUMMARIZE(dashboard_dataset, dashboard_dataset[store_nbr]),
+            "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+        )
+    VAR Worst =
+        TOPN(1, StoreErrors, [Error], DESC)
+    RETURN
+        MAXX(Worst, [Error])
+    , DisplayFolder = "_Worst store / family"

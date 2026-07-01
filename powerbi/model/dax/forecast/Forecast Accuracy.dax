@@ -1,0 +1,10 @@
+-------------------------------
+-- Measure: [Forecast Accuracy]
+-------------------------------
+MEASURE _Measures[Forecast Accuracy] = 
+    1 -
+    DIVIDE(
+    SUMX(dashboard_dataset, ABS(dashboard_dataset[residual])),
+    SUM(dashboard_dataset[actual])
+    )
+    , DisplayFolder = "_KPI"

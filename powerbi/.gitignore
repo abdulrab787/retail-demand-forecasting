@@ -1,0 +1,17 @@
+# Power BI local cache
+.pbi/
+*.pbi
+
+# Power BI Desktop noise
+diagramLayout.json
+localSettings.json
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large binary files
+*.abf
+*.zip
+*.pbix

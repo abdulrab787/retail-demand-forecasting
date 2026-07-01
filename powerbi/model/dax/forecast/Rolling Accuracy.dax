@@ -1,0 +1,16 @@
+------------------------------
+-- Measure: [Rolling Accuracy]
+------------------------------
+MEASURE _Measures[Rolling Accuracy] = 
+    VAR Window =
+        CALCULATE(
+            [Forecast Accuracy],
+            DATESINPERIOD(
+                dashboard_dataset[date],
+                MAX(dashboard_dataset[date]),
+                -30,
+                DAY
+            )
+        )
+    RETURN Window
+    , DisplayFolder = "_KPI"

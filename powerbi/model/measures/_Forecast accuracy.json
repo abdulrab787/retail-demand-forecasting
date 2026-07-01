@@ -1,0 +1,84 @@
+------------------
+-- Measure: [RMSE]
+------------------
+MEASURE _Measures[RMSE] = 
+    SQRT(
+        AVERAGEX(
+            dashboard_dataset,
+            dashboard_dataset[residual] * dashboard_dataset[residual]
+        )
+    )
+    , DisplayFolder = "_Forecast accuracy"
+
+----------------------------
+-- Measure: [Forecast Error]
+----------------------------
+MEASURE _Measures[Forecast Error] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_Forecast accuracy"
+
+------------------
+-- Measure: [MAPE]
+------------------
+MEASURE _Measures[MAPE] = 
+    AVERAGEX(
+        dashboard_dataset,
+        ABS(dashboard_dataset[residual] / dashboard_dataset[actual])
+    )
+    , DisplayFolder = "_Forecast accuracy"
+
+----------------------------------
+-- Measure: [Total Absolute Error]
+----------------------------------
+MEASURE _Measures[Total Absolute Error] = SUMX(dashboard_dataset, ABS(dashboard_dataset[residual]))
+    , DisplayFolder = "_Forecast accuracy"
+
+-----------------
+-- Measure: [MAE]
+-----------------
+MEASURE _Measures[MAE] = 
+    AVERAGEX(
+        dashboard_dataset,
+        ABS(dashboard_dataset[residual])
+    )
+    , DisplayFolder = "_Forecast accuracy"
+
+---------------------------
+-- Measure: [Forecast Bias]
+---------------------------
+MEASURE _Measures[Forecast Bias] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_Forecast accuracy"
+
+--------------------------------
+-- Measure: [Forecast Stability]
+--------------------------------
+MEASURE _Measures[Forecast Stability] = STDEVX.P(dashboard_dataset, dashboard_dataset[residual])
+    , DisplayFolder = "_Forecast accuracy"
+
+---------------------------------
+-- Measure: [Forecast Error Band]
+---------------------------------
+MEASURE _Measures[Forecast Error Band] = ABS([Total Revenue] - [Total Predicted Revenue])
+    , DisplayFolder = "_Forecast accuracy"
+
+-----------------------------
+-- Measure: [Forecast Status]
+-----------------------------
+MEASURE _Measures[Forecast Status] = 
+    IF(
+        [Forecast Accuracy] > 0.90, "🟢 Good",
+        IF(
+            [Forecast Accuracy] > 0.75, "🟡 Warning",
+            "🔴 Poor"
+        )
+    )
+    , DisplayFolder = "_Forecast accuracy"
+
+------------------------------------
+-- Measure: [Cluster Forecast Error]
+------------------------------------
+MEASURE _Measures[Cluster Forecast Error] = 
+    AVERAGEX(
+        VALUES(dashboard_dataset[cluster]),
+        CALCULATE(AVERAGE(dashboard_dataset[residual]))
+    )
+    , DisplayFolder = "_Forecast accuracy"

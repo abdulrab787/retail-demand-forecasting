@@ -1,0 +1,5 @@
+-----------------------------
+-- Measure: [Store Avg Sales]
+-----------------------------
+MEASURE _Measures[Store Avg Sales] = AVERAGE(dashboard_dataset[store_avg_sales])
+    , DisplayFolder = "_Worst store / family"

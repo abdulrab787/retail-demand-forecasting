@@ -1,0 +1,10 @@
+----------------------------------
+-- Measure: [Inventory Risk Level]
+----------------------------------
+MEASURE _Measures[Inventory Risk Level] = 
+    IF(
+        [Inventory Risk Score] > 20,
+        "HIGH",
+        "LOW"
+    )
+    , DisplayFolder = "_Inventory"

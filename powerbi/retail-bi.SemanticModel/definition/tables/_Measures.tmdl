@@ -1,0 +1,822 @@
+table _Measures
+	lineageTag: e48823e3-a53e-4f5f-be20-564ed1475500
+
+	measure 'Total Revenue' = SUM(dashboard_dataset[actual])
+		formatString: 0
+		displayFolder: _KPI
+		lineageTag: 9eb7dae4-c91c-4043-8377-cd8b3e7696d5
+
+	measure 'Forecast Accuracy' =
+			
+			1 -
+			DIVIDE(
+			SUMX(dashboard_dataset, ABS(dashboard_dataset[residual])),
+			SUM(dashboard_dataset[actual])
+			)
+		displayFolder: _KPI
+		lineageTag: 31c0c474-df1c-4842-af88-7123284c21c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure RMSE = ```
+			
+			SQRT(
+			    AVERAGEX(
+			        dashboard_dataset,
+			        dashboard_dataset[residual] * dashboard_dataset[residual]
+			    )
+			)
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: e29db392-b4b0-4254-aa6a-2532706f1dd4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Risk' =
+			
+			IF(
+			AVERAGE(dashboard_dataset[residual]) > 20,
+			"HIGH",
+			"LOW"
+			)
+		displayFolder: _Inventory
+		lineageTag: 944d60c8-8fa6-4017-8ba6-fe639cd016ce
+
+	measure 'Promotion Revenue' = ```
+			
+			CALCULATE(
+			    SUM(dashboard_dataset[actual]),
+			    dashboard_dataset[onpromotion_x] > 0
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Promotions
+		lineageTag: 80defbcb-bf6c-4c70-8bcf-c75bcb4116bd
+
+	measure 'Promotion Rows' = ```
+			
+			CALCULATE(
+			    COUNTROWS(dashboard_dataset),
+			    dashboard_dataset[onpromotion_x] > 0
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Promotions
+		lineageTag: 255f734f-8f62-43d3-ab1e-b546ea281540
+
+	measure 'Promotion Percentage' = ```
+			
+			DIVIDE(
+			    [Promotion Revenue],
+			    [Total Revenue]
+			)
+			
+			```
+		displayFolder: _Promotions
+		lineageTag: 44442244-a383-4a7d-9ec0-f586b9d13235
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Non Promotion Revenue' =
+			
+			CALCULATE(
+			    SUM(dashboard_dataset[actual]),
+			    dashboard_dataset[onpromotion_x] = 0
+			)
+		formatString: 0
+		displayFolder: _Promotions
+		lineageTag: c47f8bfc-1eb5-4ab2-8687-862571081c30
+
+	measure 'Promotion Lift' =
+			
+			DIVIDE(
+			    [Promotion Revenue] - [Non Promotion Revenue],
+			    [Non Promotion Revenue]
+			)
+		displayFolder: _Promotions
+		lineageTag: 34ec3894-e1c7-432f-8af4-4b28bf1d9ab9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Promotion Intensity' = ```
+			
+			AVERAGE(dashboard_dataset[onpromotion_x])
+			
+			```
+		displayFolder: _Promotions
+		lineageTag: 0e84da69-66cd-4c21-818d-4d3a944137b4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Promotion Revenue (Flag)' = ```
+			
+			CALCULATE(
+			    SUM(dashboard_dataset[actual]),
+			    dashboard_dataset[promotion_flag] = 1
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Promotions
+		lineageTag: 6c6c301a-718a-4c41-b1a1-11801927e34c
+
+	measure 'Holiday Revenue' = ```
+			
+			CALCULATE(
+			    SUM(dashboard_dataset[actual]),
+			    dashboard_dataset[is_holiday] = 1
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Revenue
+		lineageTag: afd5ab7a-150a-4bd4-8417-5ab5c9f8e0c1
+
+	measure 'Store Avg Sales' = ```
+			
+			AVERAGE(dashboard_dataset[store_avg_sales])
+			
+			```
+		displayFolder: _Worst store / family
+		lineageTag: de356302-7b8e-4bb2-9e85-e81c1cde2903
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Family Avg Sales' = ```
+			
+			AVERAGE(dashboard_dataset[family_avg_sales])
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 969024e4-1029-401b-a9bc-0466e8d9eb71
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Forecast Error' = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: 47c9f2e5-0dab-4c61-b0dc-eca3ba59d110
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure MAPE = ```
+			
+			AVERAGEX(
+			    dashboard_dataset,
+			    ABS(dashboard_dataset[residual] / dashboard_dataset[actual])
+			)
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: 34809dd0-ded4-4f84-80df-2f833600e918
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Predicted Revenue' = ```
+			
+			SUM(dashboard_dataset[predicted])
+			
+			```
+		displayFolder: _Sales & volume
+		lineageTag: 309157b5-4596-4814-b3c3-81573ad0a461
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Difference' = ```
+			
+			[Total Revenue] - [Total Predicted Revenue]
+			
+			```
+		displayFolder: _Revenue
+		lineageTag: dfe3f469-e62f-4f4f-b81c-df4904c97030
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Daily Sales' = ```
+			
+			AVERAGE(dashboard_dataset[actual])
+			
+			```
+		displayFolder: _Sales & volume
+		lineageTag: 64358147-2235-4bad-9bdc-9e23a1bcf9b5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Transactions' = ```
+			
+			SUM(dashboard_dataset[transactions_x])
+			
+			```
+		formatString: 0
+		displayFolder: _Sales & volume
+		lineageTag: 90b488ca-b066-487f-8b51-72002562e066
+
+	measure 'Average Basket' = ```
+			
+			DIVIDE(
+			    [Total Revenue],
+			    [Total Transactions]
+			)
+			
+			```
+		displayFolder: _Sales & volume
+		lineageTag: 4bce388c-c3da-43e7-af54-acf0654d0186
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top Revenue Stores' = ```
+			
+			SUM(dashboard_dataset[actual])
+			
+			```
+		formatString: 0
+		displayFolder: _Store & family performance
+		lineageTag: ce75adf7-03b5-493f-9e79-ce394d6c344e
+
+	measure 'Top Product Families' = ```
+			
+			SUM(dashboard_dataset[actual])
+			
+			```
+		formatString: 0
+		displayFolder: _Store & family performance
+		lineageTag: 7348a7f8-0f37-4880-82d5-7e2f04f5fba4
+
+	measure 'Total Absolute Error' =
+			
+			SUMX(dashboard_dataset, ABS(dashboard_dataset[residual]))
+		displayFolder: _Forecast accuracy
+		lineageTag: 8c50335b-0a26-45af-b60f-a5e954cd465e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure MAE = ```
+			
+			AVERAGEX(
+			    dashboard_dataset,
+			    ABS(dashboard_dataset[residual])
+			)
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: a6a99b0b-605e-4617-bfe2-c76a6c370fab
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure R2 = ```
+			
+			VAR SS_Residual =
+			    SUMX(
+			        dashboard_dataset,
+			        (dashboard_dataset[actual] - dashboard_dataset[predicted])^2
+			    )
+			VAR SS_Total =
+			    SUMX(
+			        dashboard_dataset,
+			        (dashboard_dataset[actual] - AVERAGE(dashboard_dataset[actual]))^2
+			    )
+			RETURN
+			1 - DIVIDE(SS_Residual, SS_Total)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 2c36dc27-83bf-4434-a343-cc4d85a579ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Store Revenue' = ```
+			
+			SUM(dashboard_dataset[actual])
+			
+			```
+		formatString: 0
+		displayFolder: _Store & family performance
+		lineageTag: cc929c39-756c-4f18-a717-902b1f12d973
+
+	measure 'Store Forecast Error' = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Store & family performance
+		lineageTag: be0ea4f4-63b5-4329-8cf8-d7b73b62b337
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Family Revenue' = ```
+			
+			SUM(dashboard_dataset[actual])
+			
+			```
+		formatString: 0
+		displayFolder: _Store & family performance
+		lineageTag: 0e540adf-a73f-4d13-9b8e-33e2b819cd40
+
+	measure 'Family Forecast Error' = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Store & family performance
+		lineageTag: 5d1dab99-e079-4620-ac35-21117a96ad15
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Holiday Type Revenue' = ```
+			
+			CALCULATE(
+			    SUM(dashboard_dataset[actual]),
+			    dashboard_dataset[holiday_type_Holiday] = TRUE()
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _KPI
+		lineageTag: 88eaf297-f66b-49af-8ffc-9ce6f894f2a6
+
+	measure 'Revenue This Month' = ```
+			
+			CALCULATE(
+			    [Total Revenue],
+			    MONTH(dashboard_dataset[date]) = MONTH(TODAY())
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Revenue
+		lineageTag: ddcb72ea-4d4d-473f-9f2c-0b87a3140c34
+
+	measure 'Revenue Last Month' = ```
+			
+			CALCULATE(
+			    [Total Revenue],
+			    DATEADD(dashboard_dataset[date], -1, MONTH)
+			)
+			
+			```
+		formatString: 0
+		displayFolder: _Revenue
+		lineageTag: ed91da3d-07cb-4615-90e5-208ff9985080
+
+	measure 'MoM Growth' = ```
+			
+			DIVIDE(
+			    [Revenue This Month] - [Revenue Last Month],
+			    [Revenue Last Month]
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 0bee4e71-5e4d-475d-b81c-ca29ee69d557
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Risk Score' = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Inventory
+		lineageTag: bec34ffd-d1a6-4810-a4bc-fb3f9fa78796
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Risk Level' = ```
+			
+			IF(
+			    [Inventory Risk Score] > 20,
+			    "HIGH",
+			    "LOW"
+			)
+			
+			```
+		displayFolder: _Inventory
+		lineageTag: 68de4f58-f252-440c-b3cf-509214196c26
+
+	measure 'Total Stores' = ```
+			
+			DISTINCTCOUNT(dashboard_dataset[store_nbr])
+			
+			```
+		formatString: 0
+		displayFolder: _KPI
+		lineageTag: 0c116545-7296-43cf-84b4-ebd8257c302d
+
+	measure 'Total Product Families' = ```
+			
+			DISTINCTCOUNT(dashboard_dataset[family])
+			
+			```
+		formatString: 0
+		displayFolder: _KPI
+		lineageTag: e138fd75-8856-4de9-8f76-e673fb9239df
+
+	measure 'Forecast Bias' = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: 1eafed07-1f36-4c32-b6b7-5e78542df0ca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Forecast Stability' = ```
+			
+			STDEVX.P(dashboard_dataset, dashboard_dataset[residual])
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: c5ec39c5-f743-4f7e-aa35-3c7ceb959e78
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Worst Store' = ```
+			
+			VAR StoreErrors =
+			    ADDCOLUMNS(
+			        SUMMARIZE(dashboard_dataset, dashboard_dataset[store_nbr]),
+			        "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+			    )
+			VAR Worst =
+			    TOPN(1, StoreErrors, [Error], DESC)
+			RETURN
+			    MAXX(Worst, dashboard_dataset[store_nbr])
+			
+			```
+		formatString: 0
+		displayFolder: _Worst store / family
+		lineageTag: 2943d1b9-ebd1-4a11-9f2c-fff2a9c8d2ea
+
+	measure 'Worst Product Family' = ```
+			
+			VAR FamilyErrors =
+			    ADDCOLUMNS(
+			        SUMMARIZE(dashboard_dataset, dashboard_dataset[family]),
+			        "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+			    )
+			VAR Worst =
+			    TOPN(1, FamilyErrors, [Error], DESC)
+			RETURN
+			    MAXX(Worst, dashboard_dataset[family])
+			
+			```
+		displayFolder: _Worst store / family
+		lineageTag: 47a5a6b6-a0e0-4a91-b822-65f8ca5ec732
+
+	measure 'Worst Store Error' = ```
+			
+			VAR StoreErrors =
+			    ADDCOLUMNS(
+			        SUMMARIZE(dashboard_dataset, dashboard_dataset[store_nbr]),
+			        "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+			    )
+			VAR Worst =
+			    TOPN(1, StoreErrors, [Error], DESC)
+			RETURN
+			    MAXX(Worst, [Error])
+			
+			```
+		displayFolder: _Worst store / family
+		lineageTag: a5cb9098-b1a9-4d03-b693-64044a6283d4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Worst Product Family Error' = ```
+			
+			VAR FamilyErrors =
+			    ADDCOLUMNS(
+			        SUMMARIZE(dashboard_dataset, dashboard_dataset[family]),
+			        "Error", CALCULATE(AVERAGE(dashboard_dataset[residual]))
+			    )
+			VAR Worst =
+			    TOPN(1, FamilyErrors, [Error], DESC)
+			RETURN
+			    MAXX(Worst, [Error])
+			
+			```
+		displayFolder: _Sales & volume
+		lineageTag: 69f26890-fcb2-468c-9050-fcd7e6701b88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Absolute Error' = ```
+			
+			SUMX(
+			    dashboard_dataset,
+			    ABS(dashboard_dataset[residual])
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 6ca51a40-3e49-4ca2-a6a6-fbd7648c0972
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rolling Accuracy' = ```
+			
+			VAR Window =
+			    CALCULATE(
+			        [Forecast Accuracy],
+			        DATESINPERIOD(
+			            dashboard_dataset[date],
+			            MAX(dashboard_dataset[date]),
+			            -30,
+			            DAY
+			        )
+			    )
+			RETURN Window
+			
+			```
+		displayFolder: _KPI
+		lineageTag: c14261f6-5fbd-4092-84fd-27d3de577713
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cluster Revenue' = ```
+			SUM(dashboard_dataset[actual])
+			
+			```
+		formatString: 0
+		displayFolder: _Revenue
+		lineageTag: 13f6036a-e0f1-4be1-bdfa-1d1329033dae
+
+	measure 'Forecast Error Band' = ```
+			
+			ABS([Total Revenue] - [Total Predicted Revenue])
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: 76c5f86d-4574-42c2-ba0d-302d64ded557
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Forecast Status' =
+			
+			IF(
+			    [Forecast Accuracy] > 0.90, "🟢 Good",
+			    IF(
+			        [Forecast Accuracy] > 0.75, "🟡 Warning",
+			        "🔴 Poor"
+			    )
+			)
+		displayFolder: _Forecast accuracy
+		lineageTag: 79c28b3d-daef-4080-95c0-cc33696e52ac
+
+	measure 'Cluster Forecast Error' = ```
+			
+			AVERAGEX(
+			    VALUES(dashboard_dataset[cluster]),
+			    CALCULATE(AVERAGE(dashboard_dataset[residual]))
+			)
+			
+			```
+		displayFolder: _Forecast accuracy
+		lineageTag: 200bfd60-1081-4bfc-9f46-d487e05463a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue MOM' = ```
+			
+			DIVIDE(
+			    [Total Revenue] - CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, MONTH)),
+			    CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, MONTH))
+			)
+			
+			```
+		displayFolder: _Revenue
+		lineageTag: 96988132-332c-45d9-822c-45523dd29776
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YOY' = ```
+			
+			DIVIDE(
+			    [Total Revenue] - CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, YEAR)),
+			    CALCULATE([Total Revenue], DATEADD(dashboard_dataset[date], -1, YEAR))
+			)
+			
+			```
+		displayFolder: _Revenue
+		lineageTag: 9fa7edff-59dd-4f5f-ab6e-d8bedb5b838a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Store Segment' =
+			
+			SWITCH(
+			    TRUE(),
+			    [Store Revenue] > 10e6, "High Performer",
+			    [Store Revenue] > 5e6, "Mid Performer",
+			    "Low Performer"
+			)
+		displayFolder: _KPI
+		lineageTag: 9ba8291a-fcf0-405a-81d5-6d88103a3c4c
+
+	measure 'Top Family' = ```
+			
+			CONCATENATEX(
+			    TOPN(
+			        1,
+			        SUMMARIZE(
+			            dashboard_dataset,
+			            dashboard_dataset[family],
+			            "Revenue", [Total Revenue]
+			        ),
+			        [Revenue],
+			        DESC
+			    ),
+			    dashboard_dataset[family]
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 2a4fed87-f28d-4516-85c6-c077e176e01a
+
+	measure 'Top Stores' = ```
+			
+			CONCATENATEX(
+			    TOPN(
+			        3,
+			        SUMMARIZE(
+			            dashboard_dataset,
+			            dashboard_dataset[store_nbr],
+			            "Revenue", [Store Revenue]
+			        ),
+			        [Revenue],
+			        DESC
+			    ),
+			    dashboard_dataset[store_nbr],
+			    ", "
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 02a340f7-3594-4e7a-977b-b68d1d18841c
+
+	measure 'Absolute Residual' = ```
+			
+			SUMX(
+			    dashboard_dataset,
+			    ABS(dashboard_dataset[residual])
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: daa81077-a298-45ae-a6d2-f83eaf6a7fa3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Residual = ```
+			
+			AVERAGE(dashboard_dataset[residual])
+			
+			```
+		displayFolder: _KPI
+		lineageTag: dfb44e0e-ca85-4f9d-af0c-1fdcd8687af3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Residual Bin' = ```
+			
+			VAR BinSize = 5
+			RETURN
+			FLOOR(AVERAGE(dashboard_dataset[residual]), BinSize)
+			
+			```
+		formatString: 0
+		displayFolder: _KPI
+		lineageTag: 78ede843-2048-4140-ab53-4b6599eef797
+
+	measure 'Residual Bin Label' = ```
+			
+			VAR BinSize = 5
+			VAR ResidualValue = AVERAGE(dashboard_dataset[residual])
+			VAR BinStart = FLOOR(ResidualValue, BinSize)
+			VAR BinEnd = BinStart + BinSize
+			RETURN
+			FORMAT(BinStart, "0") & " to " & FORMAT(BinEnd, "0")
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 13c441ea-91c7-4fde-849e-77545363dfe4
+
+	measure 'Residual Category' = ```
+			
+			VAR R = AVERAGE(dashboard_dataset[residual])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    R > 10, "High Over‑Prediction",
+			    R > 0, "Over‑Prediction",
+			    R < -10, "High Under‑Prediction",
+			    R < 0, "Under‑Prediction",
+			    "Perfect"
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 433e43b1-556c-4172-8bdf-f8b9a8167fc5
+
+	measure 'Residual Variance' = ```
+			
+			VAR MeanResidual = [Residual]
+			RETURN
+			AVERAGEX(
+			    dashboard_dataset,
+			    (dashboard_dataset[residual] - MeanResidual)^2
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: a854f865-a7ed-4812-8254-4346a02a1a65
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Store Revenue' = ```
+			
+			AVERAGEX(
+			    VALUES(dashboard_dataset[store_nbr]),
+			    CALCULATE(SUM(dashboard_dataset[actual]))
+			)
+			
+			```
+		displayFolder: _KPI
+		lineageTag: ec682503-82b8-4e5e-9837-980ee2e664a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Risk Numeric' = ```
+			
+			IF([Inventory Risk] = "HIGH", 2, 1)
+			
+			```
+		formatString: 0
+		displayFolder: _Inventory
+		lineageTag: 01311c20-bea1-486f-bf94-5d720c4b7d9f
+
+	measure 'Average Error' =
+			
+			AVERAGEX(
+			    dashboard_dataset,
+			    ABS(dashboard_dataset[residual])
+			)
+		displayFolder: _KPI
+		lineageTag: f4d27081-291c-4623-b76f-6ebfc1f5c5c8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Store Opportunity Score' = ```
+			
+			[Store Revenue] * [Total Transactions]
+			
+			```
+		formatString: 0
+		displayFolder: _Store & family performance
+		lineageTag: f63307e3-9ee2-4367-89e5-00369dc7c0e8
+
+	measure 'Seasonality Index' =
+			
+			DIVIDE(
+			    [Total Revenue],
+			    CALCULATE([Total Revenue], ALL(dashboard_dataset[month]))
+			)
+		displayFolder: _KPI
+		lineageTag: 599157ce-58ef-4104-be15-bc9964947c01
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Store Risk Score' = ```
+			
+			[Store Forecast Error] * [Inventory Risk Numeric]
+			
+			```
+		displayFolder: _KPI
+		lineageTag: 78651d28-e2ed-45ab-8e3b-a78e33b0bf4c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 09fe1db4-81f8-4a48-87d4-d93f2b5d924c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = f7b85c9475d4416a8fee8a484f9be2df
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

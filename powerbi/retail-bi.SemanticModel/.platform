@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "retail-bi"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0e420831-1407-4c22-975e-036d68656753"
+  }
+}

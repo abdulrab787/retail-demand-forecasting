@@ -1,0 +1,4 @@
+-----------------------------
+-- Calculated Table: 'Stores'
+-----------------------------
+TABLE Stores = VALUES(dashboard_dataset[store_nbr])

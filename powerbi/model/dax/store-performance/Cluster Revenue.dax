@@ -1,0 +1,6 @@
+-----------------------------
+-- Measure: [Cluster Revenue]
+-----------------------------
+MEASURE _Measures[Cluster Revenue] = SUM(dashboard_dataset[actual])
+    , DisplayFolder = "_Revenue"
+    , FormatString = "0"

@@ -1,0 +1,5 @@
+----------------------------------
+-- Measure: [Inventory Risk Score]
+----------------------------------
+MEASURE _Measures[Inventory Risk Score] = AVERAGE(dashboard_dataset[residual])
+    , DisplayFolder = "_Inventory"

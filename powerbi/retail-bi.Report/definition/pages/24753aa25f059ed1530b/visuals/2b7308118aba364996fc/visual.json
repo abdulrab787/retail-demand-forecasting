@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "2b7308118aba364996fc",
+  "position": {
+    "x": 16,
+    "y": 544,
+    "z": 8000,
+    "height": 96.000000000000014,
+    "width": 384.00000000000006,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Top Family"
+                }
+              },
+              "queryRef": "Date.Top Family",
+              "nativeQueryRef": "Top Family"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
