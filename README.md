@@ -9,24 +9,29 @@
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
 </p>
 
+---
 
 # 📘 **Retail Demand Forecasting — End‑to‑End MLOps Project**
 
-An end‑to‑end **Retail Demand Forecasting System** built using:
+A complete **Retail Demand Forecasting System** built using:
 
-- **Python (FastAPI, MLflow, SHAP, CatBoost, LightGBM, XGBoost)**
-- **Postgres SQL (Star Schema)**
-- **Docker + Docker Compose**
-- **GitHub Actions CI**
-- **Power BI Dashboard**
-- **MLflow Tracking + Model Registry**
-- **Production‑grade Logging & Environment Variables**
+- **Python (FastAPI, MLflow, SHAP, CatBoost, LightGBM, XGBoost)**  
+- **Postgres SQL (Star Schema)**  
+- **Docker + Docker Compose**  
+- **GitHub Actions CI**  
+- **Power BI Dashboard**  
+- **MLflow Tracking + Model Registry**  
+- **Production Logging & Environment Variables**
 
-This project demonstrates a complete **MLOps workflow** from raw data → ETL → feature engineering → model training → experiment tracking → model registry → API deployment → monitoring.
+This project demonstrates a full **MLOps workflow**:  
+**Raw data → ETL → Feature engineering → Model training → MLflow tracking → Model registry → FastAPI deployment → Monitoring.**
 
 ---
 
 # 🏗️ **Architecture Overview**
+
+### ✔ Mermaid Architecture Diagram (GitHub‑compatible)
+
 ```mermaid
 flowchart TD
     A[Raw Data (Kaggle)] --> B[ETL Pipeline (Python + SQL)]
@@ -36,45 +41,6 @@ flowchart TD
     E --> F[FastAPI Prediction Service]
     F --> G[Docker Deployment (API + DB)]
     G --> H[Power BI Dashboard]
-
-```
-                ┌──────────────────────────┐
-                │        Raw Data          │
-                └──────────────┬───────────┘
-                               ▼
-                    ┌──────────────────┐
-                    │       ETL        │
-                    │  (Python + SQL)  │
-                    └──────────┬───────┘
-                               ▼
-                    ┌──────────────────┐
-                    │  Feature Store   │
-                    │ (Postgres SQL)   │
-                    └──────────┬───────┘
-                               ▼
-                    ┌──────────────────┐
-                    │   Model Training │
-                    │ (CatBoost, LGBM) │
-                    └──────────┬───────┘
-                               ▼
-                    ┌──────────────────┐
-                    │   MLflow Tracking│
-                    │   + Model Registry│
-                    └──────────┬────────┘
-                               ▼
-                    ┌──────────────────┐
-                    │   FastAPI        │
-                    │   Prediction API │
-                    └──────────┬────────┘
-                               ▼
-                    ┌──────────────────┐
-                    │ Docker Compose   │
-                    │ API + Postgres   │
-                    └──────────┬────────┘
-                               ▼
-                    ┌──────────────────┐
-                    │ Power BI Reports │
-                    └──────────────────┘
 ```
 
 ---
@@ -85,11 +51,11 @@ Dataset: **Corporación Favorita Grocery Sales Forecasting (Kaggle)**
 Granularity: Daily sales per store per product family  
 Key fields:
 
-- `store_nbr`
-- `family`
-- `sales`
-- `onpromotion`
-- `transactions`
+- `store_nbr`  
+- `family`  
+- `sales`  
+- `onpromotion`  
+- `transactions`  
 - `date`
 
 Time range: **2013–2017**
@@ -98,7 +64,8 @@ Time range: **2013–2017**
 
 # 🧱 **SQL Star Schema**
 
-```md
+### ✔ Mermaid ER Diagram (GitHub‑compatible)
+
 ```mermaid
 erDiagram
     SALES_FACT {
@@ -134,70 +101,22 @@ erDiagram
         bool holiday_flag
     }
 
-    SALES_FACT ||--|| STORES_DIM : "store_key"
-    SALES_FACT ||--|| ITEMS_DIM : "item_key"
-    SALES_FACT ||--|| CALENDAR_DIM : "date_key"
-
-### **Fact Table: `sales_fact`**
-- `date_key`
-- `store_key`
-- `item_key`
-- `sales`
-- `onpromotion`
-- `transactions`
-
-### **Dimension Tables**
-#### `stores_dim`
-- `store_key`
-- `store_nbr`
-- `city`
-- `state`
-- `cluster`
-
-#### `items_dim`
-- `item_key`
-- `family`
-- `class`
-- `perishable`
-
-#### `calendar_dim`
-- `date_key`
-- `date`
-- `day_of_week`
-- `month`
-- `year`
-- `holiday_flag`
+    SALES_FACT ||--|| STORES_DIM : store_key
+    SALES_FACT ||--|| ITEMS_DIM : item_key
+    SALES_FACT ||--|| CALENDAR_DIM : date_key
+```
 
 ---
 
 # 🔄 **ETL Workflow**
-```md
+
 ```mermaid
 flowchart LR
     A[Raw CSV Files] --> B[Staging Layer]
     B --> C[Cleaning & Validation]
     C --> D[Feature Engineering]
     D --> E[Postgres Fact & Dimension Tables]
-
-### **1. Raw → Staging**
-- Load CSVs
-- Normalize column names
-- Convert date formats
-
-### **2. Cleaning**
-- Handle missing values
-- Remove outliers
-- Merge transactions
-
-### **3. Transformations**
-- Create lag features
-- Create rolling windows
-- Encode categorical variables
-- Join dimension tables
-
-### **4. Load into Postgres**
-- Fact + dimension tables
-- Indexes for fast querying
+```
 
 ---
 
@@ -205,15 +124,11 @@ flowchart LR
 
 | Feature | Description |
 |--------|-------------|
-| `lag_1` | Sales 1 day ago |
-| `lag_7` | Sales 7 days ago |
-| `lag_14` | Sales 14 days ago |
-| `rolling_mean_7` | 7‑day moving average |
-| `rolling_mean_30` | 30‑day moving average |
+| `lag_1`, `lag_7`, `lag_14` | Prior sales values |
+| `rolling_mean_7`, `rolling_mean_30` | Moving averages |
 | `onpromotion` | Promotion flag |
 | `transactions` | Store traffic |
-| `month` | Calendar month |
-| `day_of_week` | Calendar weekday |
+| `month`, `day_of_week` | Calendar features |
 
 ---
 
@@ -221,18 +136,12 @@ flowchart LR
 
 Models trained:
 
-- **CatBoost**
-- **LightGBM**
-- **XGBoost**
-- **Linear Regression**
+- CatBoost  
+- LightGBM  
+- XGBoost  
+- Linear Regression  
 
-Metrics stored in:
-
-```
-models/metrics.csv
-```
-
-### **Logged Metrics (MLflow)**
+Metrics logged to MLflow:
 
 - MAE  
 - RMSE  
@@ -245,43 +154,41 @@ models/metrics.csv
 
 # 🔍 **SHAP Explainability**
 
-SHAP plots generated:
+Generated SHAP plots:
 
 - Summary plot  
-- Bar plot  
+- Feature importance bar chart  
 - Dependence plots  
 
-Insights:
+Key insights:
 
-- Lag features dominate prediction  
-- Promotions significantly increase demand  
+- Lag features dominate predictions  
+- Promotions significantly boost demand  
 - Transactions correlate strongly with sales  
 
 ---
 
 # ⚡ **FastAPI Prediction Service**
 
-Endpoints:
+### Endpoints
 
-### `GET /`
+#### `GET /`
 Health check
 
-### `POST /predict`
-Predict next‑day demand using MLflow model registry.
-
-FastAPI loads:
+#### `POST /predict`
+Predict next‑day demand using MLflow Production model:
 
 ```
 models:/retail_forecasting_model/Production
 ```
 
-CI uses a mock model for stability.
+CI uses a **mock model** for stability.
 
 ---
 
 # 🐳 **Docker Usage**
 
-### **Build & Run**
+### Build & Run
 
 ```
 docker compose up --build
@@ -289,14 +196,14 @@ docker compose up --build
 
 Services:
 
-- `api` → FastAPI
-- `postgres` → Database
+- `api` → FastAPI  
+- `postgres` → Database  
 
 ---
 
 # 📈 **MLflow Tracking & Model Registry**
 
-Screenshots include:
+Includes:
 
 - Experiment runs  
 - Metrics  
@@ -304,23 +211,23 @@ Screenshots include:
 - Registered models  
 - Production model  
 
-MLflow UI runs at:
+MLflow UI:
 
 ```
 http://127.0.0.1:5000
 ```
 
-
+---
 
 # 🧪 **GitHub Actions CI**
 
 Badge:
 
 ```
-![CI](https://github.com/<Abdurrab787>/<repo>/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/abdulrab787/retail-demand-forecasting/actions/workflows/ci.yml/badge.svg)
 ```
 
-CI pipeline:
+Pipeline:
 
 - Install dependencies  
 - Run tests  
@@ -335,7 +242,7 @@ Includes:
 
 - Store‑level forecasting  
 - Family‑level trends  
-- Promotions impact  
+- Promotion impact  
 - Seasonal patterns  
 - Drill‑through pages  
 
@@ -343,53 +250,57 @@ Includes:
 
 # 🛠️ **Project Structure**
 
+```
 retail-demand-forecasting/
 │
 ├── app/
 │   ├── main.py
 │   ├── predictor.py
 │   ├── logging_config.py
-
+│
 ├── src/
 │   ├── train.py
 │   ├── etl.py
 │   ├── features.py
-
+│
 ├── tests/
 │   ├── test_api.py
 │
 ├── models/
 │   ├── metrics.csv
-│   ├── catboost.pkl
-
+│
 ├── data/
 ├── database/
 ├── notebooks/
 ├── powerbi/
 ├── reports/
-
+│
 ├── images/
 │   ├── xgboost_prediction.png
 │   ├── lightgbm_prediction.png
-├── tests/
+│
 ├── .github/
-
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── README.md
 └── LICENSE
+```
+
+---
 
 # 🚀 **Future Improvements**
 
-- Hyperparameter tuning (Optuna)
-- Model monitoring (Prometheus + Grafana)
-- Drift detection (Evidently AI)
-- Batch inference pipeline
-- Real‑time streaming (Kafka)
-- Kubernetes deployment
-- Feature Store (Feast)
-- Automated retraining pipeline
+- Hyperparameter tuning (Optuna)  
+- Model monitoring (Prometheus + Grafana)  
+- Drift detection (Evidently AI)  
+- Batch inference pipeline  
+- Real‑time streaming (Kafka)  
+- Kubernetes deployment  
+- Feature Store (Feast)  
+- Automated retraining pipeline  
+
+---
 
 # 📝 **License**
 
