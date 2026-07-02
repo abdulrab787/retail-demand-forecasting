@@ -1,13 +1,74 @@
-.venv/
+# ============================
+# Python
+# ============================
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# ============================
+# Virtual Environments
+# ============================
+.venv/
+venv/
+env/
+mlflow_env/
+
+# ============================
+# Environment Variables
+# ============================
+.env
+.env.local
+.env.production
+.env.development
+
+# ============================
+# MLflow
+# ============================
+mlruns/
+mlflow.db
+mlflow.log
+mlflow.yaml
+
+# MLflow model artifacts (large)
+**/artifacts/
+**/mlartifacts/
+
+# ============================
+# CatBoost Logs
+# ============================
+catboost_info/
+
+# ============================
+# Jupyter / Notebooks
+# ============================
 .ipynb_checkpoints/
 
-data/raw/
-data/interim/
-models/
-*.pkl
-*.joblib
-*.csv
-
-.vscode/
+# ============================
+# OS / Editor Files
+# ============================
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ============================
+# Docker
+# ============================
+# Docker build cache
+**/.dockerignore
+**/docker-cache/
+**/docker-volume/
+
+# ============================
+# Logs
+# ============================
+*.log
+logs/
+
+# ============================
+# Testing
