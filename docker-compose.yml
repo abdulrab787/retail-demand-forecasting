@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: retail_forecasting
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
